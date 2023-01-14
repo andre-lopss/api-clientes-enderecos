@@ -1,4 +1,5 @@
 using API.Context;
+using api_enderecos.Repositories;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -7,7 +8,8 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddDbContext<ApiContext> (options =>
         options.UseSqlServer(builder.Configuration.GetConnectionString("ConexaoPadrao")));
-
+builder.Services.AddScoped<ClienteRepository>();
+builder.Services.AddScoped<EnderecoRepository>();
 
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
