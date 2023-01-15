@@ -1,5 +1,7 @@
 using API.Context;
 using API.Models;
+using api_enderecos.Dto;
+using Microsoft.EntityFrameworkCore;
 
 namespace api_enderecos.Repositories
 {
@@ -21,13 +23,15 @@ namespace api_enderecos.Repositories
 
         public Cliente ObterPorId(int id)
         {
-            var cliente = _context.Clientes.Find(id);
+            var cliente = _context.Clientes.Include(x => x.Enderecos)
+                                           .FirstOrDefault(x => x.Id == id);
+            
             return cliente;
         }
 
-        public Cliente Atualizar(Cliente cliente)
+        public AtualizarClienteDto Atualizar(int id, AtualizarClienteDto cliente)
         {
-            var clienteDb = ObterPorId(cliente.Id);
+            var clienteDb = ObterPorId(id);
 
             if(clienteDb is null)
                 return null; 
@@ -36,8 +40,7 @@ namespace api_enderecos.Repositories
             clienteDb.Documento = cliente.Documento;
             clienteDb.Email = cliente.Email;
             clienteDb.Ativo = cliente.Ativo;
-            //clienteDb.Enderecos = cliente.Enderecos;
-
+           
             _context.Clientes.Update(clienteDb);
             _context.SaveChanges();
             return cliente;

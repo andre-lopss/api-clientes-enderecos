@@ -1,5 +1,7 @@
 using API.Context;
 using API.Models;
+using api_enderecos.Dto;
+using Microsoft.EntityFrameworkCore;
 
 namespace api_enderecos.Repositories
 {
@@ -21,36 +23,39 @@ namespace api_enderecos.Repositories
 
         public Endereco ObterPorId(int id)
         {
-            var endereco = _context.Enderecos.Find(id);
+            var endereco = _context.Enderecos.Include(x => x.Cliente)
+                                                .FirstOrDefault(x => x.Id == id);
             return endereco;
         }
 
-        public Endereco Atualizar(Endereco endereco)
+        public AtualizarEnderecoDto Atualizar(int id, AtualizarEnderecoDto endereco)
         {
-            var enderecoDb = ObterPorId(endereco.Id);
+            var enderecoDb = ObterPorId(id);
 
-            if(enderecoDb is null)
+            if (enderecoDb is null)
                 return null;
 
             enderecoDb.Logradouro = endereco.Logradouro;
-            enderecoDb.Numero = enderecoDb.Numero;
-            enderecoDb.Cep = enderecoDb.Cep;
+            enderecoDb.Numero = endereco.Numero;
+            enderecoDb.Cep = endereco.Cep;
 
             _context.Enderecos.Update(enderecoDb);
             _context.SaveChanges();
             return endereco;
+
+
         }
 
         public bool Deletar(int id)
         {
             var enderecoDb = ObterPorId(id);
 
-            if(enderecoDb is null)
+            if (enderecoDb is null)
                 return false;
 
             _context.Remove(enderecoDb);
             _context.SaveChanges();
-            
+
             return true;
         }
 

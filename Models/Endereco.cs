@@ -1,3 +1,5 @@
+using api_enderecos.Dto;
+
 namespace API.Models
 {
     public class Endereco
@@ -8,5 +10,16 @@ namespace API.Models
         public string Cep { get; set; }
         public int ClienteID { get; set; }
         public Cliente Cliente { get; set; }
+
+        public Endereco()
+        {
+
+        }
+        public Endereco(EnderecoDto dto)
+        {
+            Logradouro = dto.Logradouro;
+            Numero = dto.Numero;
+            Cep = dto.Cep;
+        }
     }
 }
