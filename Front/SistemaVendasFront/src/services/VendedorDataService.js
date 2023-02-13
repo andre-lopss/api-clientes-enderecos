@@ -1,8 +1,8 @@
 import { HttpProxy } from "vite";
-import htttp from "../htttp-common";
+import http from "../htttp-common";
 
-class VendedordataService{
+class VendedorDataService{
     listar(){
-        return HttpProxy.get('/vendedor/listar')
+        return http.get('/vendedor/listar')
     }
 }
